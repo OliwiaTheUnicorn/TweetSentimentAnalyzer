@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from sentimentAnalyzer import getSentiment, train, clearData, updateNegativeTweet, updatePostiveTweet
 
 import nltk
 
@@ -11,13 +12,10 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == "POST":
+        train()
         inp = request.form.get("inp")
-        sid = SentimentIntensityAnalyzer()
-        score = sid.polarity_scores(inp)
-        if score["neg"] != 0:
-            return render_template('analyzer.html', message="Negative😞😞")
-        else:
-            return render_template('analyzer.html', message="Positive🙂🙂")
+        result = getSentiment(inp)
+        return render_template('analyzer.html', message=result)
     else:
         return render_template('analyzer.html', message="Hello🙂🙂")
 
