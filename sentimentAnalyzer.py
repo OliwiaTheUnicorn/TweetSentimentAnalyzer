@@ -7,6 +7,7 @@ from nltk import FreqDist, classify, NaiveBayesClassifier
 import re, string, random
 
 import nltk
+import json
 
 nltk.download('twitter_samples')
 nltk.download('stopwords')
@@ -49,13 +50,13 @@ def get_tweets_for_model(cleaned_tokens_list):
 
 def updatePostiveTweet(data):
     f = open(r'C:\nltk_data\corpora\twitter_samples\updated_positive_tweets.json', "a")
-    f.write(data)
+    json.dump(getJsonData(data), f)
     f.write("\n")
     f.close()
 
 def updateNegativeTweet(data):
     f = open(r"C:\nltk_data\corpora\twitter_samples\updated_negative_tweets.json", "a")
-    f.write(data)
+    json.dump(getJsonData(data), f)
     f.write("\n")
     f.close()
 
@@ -65,6 +66,29 @@ def clearData():
     f.close()
     f = open(r"C:\nltk_data\corpora\twitter_samples\updated_positive_tweets.json", "w")
     f.write("")
+    f.close()
+
+def getJsonData(text):
+    data = '{"text": "testData"}'
+    # parse x:
+    jsonData = json.loads(data)
+    jsonData["text"] = text
+    return jsonData
+
+def initializeFiles():
+    positiveText = "This is a positive test"
+    negativeText = "This is a negative test"
+
+    negativeData = getJsonData(negativeText)
+    positiveData = getJsonData(positiveText)
+
+    f = open(r"C:\nltk_data\corpora\twitter_samples\updated_negative_tweets.json", "w")
+    json.dump(negativeData, f)
+    f.write("\n")
+    f.close()
+    f = open(r"C:\nltk_data\corpora\twitter_samples\updated_positive_tweets.json", "w")
+    json.dump(positiveData, f)
+    f.write("\n")
     f.close()
 
 def train():
