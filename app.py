@@ -12,17 +12,34 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == "POST":
-        #initializeFiles()
-        train()
-        inp = request.form.get("inp")
-        result = getSentiment(inp)
+        if (request.values.get("action") == 'Reset'):
+            initializeFiles()
+            result = "Sentiment Analyzer is initialized"
+            inputValue = ""
+        elif (request.values.get("action") == 'Train'):
+            train()
+            result = "Sentiment Analyzer training is complete"
+            inputValue = ""
+        elif (request.values.get("action") == 'Submit'):
+            inputValue = request.form.get("inp")
+            if not inputValue:
+                result = "Input is empty"
+            else:
+                result = getSentiment(inputValue)
+        elif (request.values.get("action") == 'Feedback'):
+            inputValue = request.form.get("inp")
+            if not inputValue:
+                result = "Input is empty"
+            else:
+                if (request.form.get('decision') == 'Positive'):
+                    updatePostiveTweet(inputValue)
+                else:
+                    updateNegativeTweet(inputValue)
+                result = "Feedback has been added. Please train the model again"
 
-        #updatePostiveTweet(inp)
-        #updateNegativeTweet(inp)
-        #result = "test"
-        return render_template('analyzer.html', message=result)
+        return render_template('analyzer.html', message=result, input=inputValue)
     else:
-        return render_template('analyzer.html', message="Hello🙂🙂")
+        return render_template('analyzer.html', message="Hello🙂🙂", input="")
 
 
 if __name__ == '__main__':

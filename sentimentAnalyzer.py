@@ -132,8 +132,8 @@ def train():
 
     random.shuffle(dataset)
 
-    train_data = dataset[:7000]
-    test_data = dataset[7000:]
+    train_data = dataset
+    test_data = dataset
 
     global classifier
 
