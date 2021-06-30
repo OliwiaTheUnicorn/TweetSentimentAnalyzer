@@ -14,11 +14,14 @@ def hello_world():
     if request.method == "POST":
         if (request.values.get("action") == 'Reset'):
             initializeFiles()
-            result = "Sentiment Analyzer is initialized"
+            result = "Sentiment Analyzer is initialized. Please train the model"
             inputValue = ""
         elif (request.values.get("action") == 'Train'):
             train()
             result = "Sentiment Analyzer training is complete"
+            inputValue = ""
+        elif (request.values.get("action") == 'Clear'):
+            result = "Welcome to Tweet Sentiment Analyzer🙂🙂"
             inputValue = ""
         elif (request.values.get("action") == 'Submit'):
             inputValue = request.form.get("inp")
@@ -39,7 +42,7 @@ def hello_world():
 
         return render_template('analyzer.html', message=result, input=inputValue)
     else:
-        return render_template('analyzer.html', message="Hello🙂🙂", input="")
+        return render_template('analyzer.html', message="Welcome to Tweet Sentiment Analyzer🙂🙂", input="")
 
 
 if __name__ == '__main__':
