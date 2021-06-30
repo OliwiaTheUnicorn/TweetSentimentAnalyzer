@@ -8,7 +8,6 @@ nltk.download('vader_lexicon')
 
 app = Flask(__name__)
 
-
 @app.route('/', methods=['GET', 'POST'])
 def hello_world():
     if request.method == "POST":

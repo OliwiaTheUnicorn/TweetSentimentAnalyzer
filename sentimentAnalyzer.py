@@ -52,10 +52,14 @@ def updatePostiveTweet(data):
     f = open(r'C:\nltk_data\corpora\twitter_samples\updated_positive_tweets.json', "a")
     json.dump(getJsonData(data), f)
     f.write("\n")
+    json.dump(getJsonData(data), f)
+    f.write("\n")
     f.close()
 
 def updateNegativeTweet(data):
     f = open(r"C:\nltk_data\corpora\twitter_samples\updated_negative_tweets.json", "a")
+    json.dump(getJsonData(data), f)
+    f.write("\n")
     json.dump(getJsonData(data), f)
     f.write("\n")
     f.close()
@@ -91,22 +95,52 @@ def initializeFiles():
     f.write("\n")
     f.close()
 
-def train():
-    stop_words = stopwords.words('english')
+def run_once(f):
+    def wrapper(*args, **kwargs):
+        if not wrapper.has_run:
+            wrapper.has_run = True
+            return f(*args, **kwargs)
+    wrapper.has_run = False
+    return wrapper
 
-    positive_tweet_tokens = twitter_samples.tokenized('positive_tweets.json')
-    negative_tweet_tokens = twitter_samples.tokenized('negative_tweets.json')
-    updated_negative_tweet_tokens = twitter_samples.tokenized('updated_negative_tweets.json')
-    updated_positive_tweet_tokens = twitter_samples.tokenized('updated_positive_tweets.json')
+@run_once
+def getNonDeterminedDataset(stop_words):
+    print("Getting Non determined Dataset")
+    global non_determined_dataset
+    non_determined_tweet_tokens = twitter_samples.tokenized('non_determined_data.json')
+    non_determined_cleaned_tokens_list = []
+    for tokens in non_determined_tweet_tokens:
+        non_determined_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
+    non_determined_tokens_for_model = get_tweets_for_model(non_determined_cleaned_tokens_list)
+    non_determined_dataset = [(tweet_dict, "Non Determined")
+                              for tweet_dict in non_determined_tokens_for_model]
 
+@run_once
+def getPositiveDataset(stop_words):
+    print("Getting Positive Dataset")
+    global positive_cleaned_tokens_list
     positive_cleaned_tokens_list = []
-    negative_cleaned_tokens_list = []
-
+    positive_tweet_tokens = twitter_samples.tokenized('positive_tweets.json')
     for tokens in positive_tweet_tokens:
         positive_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
 
+@run_once
+def getNegativeDataset(stop_words):
+    print("Getting Negative Dataset")
+    global negative_cleaned_tokens_list
+    negative_cleaned_tokens_list = []
+    negative_tweet_tokens = twitter_samples.tokenized('negative_tweets.json')
     for tokens in negative_tweet_tokens:
         negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
+
+def train():
+    stop_words = stopwords.words('english')
+    getNegativeDataset(stop_words)
+    getPositiveDataset(stop_words)
+    getNonDeterminedDataset(stop_words)
+
+    updated_negative_tweet_tokens = twitter_samples.tokenized('updated_negative_tweets.json')
+    updated_positive_tweet_tokens = twitter_samples.tokenized('updated_positive_tweets.json')
 
     for tokens in updated_negative_tweet_tokens:
         negative_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
@@ -128,7 +162,7 @@ def train():
     negative_dataset = [(tweet_dict, "Negative")
                          for tweet_dict in negative_tokens_for_model]
 
-    dataset = positive_dataset + negative_dataset
+    dataset = non_determined_dataset + positive_dataset + negative_dataset
 
     random.shuffle(dataset)
 
@@ -144,8 +178,6 @@ def train():
     print(classifier.show_most_informative_features(10))
 
 def getSentiment(custom_tweet):
-
-    #custom_tweet = "My experience with you was overall pejorative"
 
     custom_tokens = remove_noise(word_tokenize(custom_tweet))
 
