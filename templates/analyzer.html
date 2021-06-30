@@ -5,15 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script type="text/javascript">// <![CDATA[
         function loading(){
-            //$("#loading").show();
-            //$("#content").hide();
-             /* var x = document.getElementById("loading");
-              if (x.style.display === "none") {
-                x.style.display = "block";
-              } else {
-                x.style.display = "none";
-              }*/
-            document.getElementById("myNav").style.width = "100%";
+            document.getElementById("full-overlay").style.width = "100%";
             document.getElementById("btn-clear").disabled = true;
         }
 // ]]></script>
@@ -43,38 +35,6 @@
           background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
           overflow-x: hidden; /* Disable horizontal scroll */
           transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
-        }
-
-        /* Position the content inside the overlay */
-        .overlay-content {
-          position: relative;
-          top: 25%; /* 25% from the top */
-          width: 100%; /* 100% width */
-          text-align: center; /* Centered text/links */
-          margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
-        }
-
-        /* The navigation links inside the overlay */
-        .overlay a {
-          padding: 8px;
-          text-decoration: none;
-          font-size: 36px;
-          color: #818181;
-          display: block; /* Display block instead of inline */
-          transition: 0.3s; /* Transition effects on hover (color) */
-        }
-
-        /* When you mouse over the navigation links, change their color */
-        .overlay a:hover, .overlay a:focus {
-          color: #f1f1f1;
-        }
-
-        /* Position the close button (top right corner) */
-        .overlay .closebtn {
-          position: absolute;
-          top: 20px;
-          right: 45px;
-          font-size: 60px;
         }
 
         .center {
@@ -110,11 +70,7 @@
 </head>
 <body>
 <div class="container">
-    <!--<div class="overlay">
-    <div id="loading" style="display: none">
-        </div>
-    </div>-->
-    <div id="myNav" class="overlay">
+    <div id="full-overlay" class="overlay">
         <div id="loading" class="center">
         </div>
     </div>
@@ -123,8 +79,8 @@
         <h1>Tweet Sentiment Analysis</h1>
         <form method="post" class="form">
             <div class="form-group">
-                <input type="submit" id="btn" name="action" value="Train" class="btn btn-primary" onclick="loading();">
-                <input type="submit" id="btn" name="action" value="Reset" class="btn btn-primary">
+                <input type="submit" id="btn-train" name="action" value="Train" class="btn btn-primary" onclick="loading();">
+                <input type="submit" id="btn-reset" name="action" value="Reset" class="btn btn-primary">
             </div>
             <br/>
             <div class="form-group">
@@ -137,7 +93,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <input type="submit" id="btn" name="action" value="Submit" class="btn btn-primary">
+                <input type="submit" id="btn-submit" name="action" value="Submit" class="btn btn-primary">
             </div>
             <br/>
             <br/>
@@ -148,7 +104,7 @@
                   <option value="Positive">Positive</option>
                   <option value="Negative">Negative</option>
                 </select>
-                <input type="submit" id="btn" name="action" value="Feedback" class="btn btn-primary">
+                <input type="submit" id="btn-feedback" name="action" value="Feedback" class="btn btn-primary">
             </div>
         </form>
         <br/>
