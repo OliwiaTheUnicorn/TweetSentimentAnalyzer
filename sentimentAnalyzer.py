@@ -131,18 +131,18 @@ def train():
     for tokens in updated_positive_tweet_tokens:
         positive_cleaned_tokens_list.append(remove_noise(tokens, stop_words))
 
-    all_pos_words = get_all_words(positive_cleaned_tokens_list)
+    #all_pos_words = get_all_words(positive_cleaned_tokens_list)
 
-    freq_dist_pos = FreqDist(all_pos_words)
-    print(freq_dist_pos.most_common(10))
+    #freq_dist_pos = FreqDist(all_pos_words)
+    #print(freq_dist_pos.most_common(10))
 
     positive_tokens_for_model = get_tweets_for_model(positive_cleaned_tokens_list)
     negative_tokens_for_model = get_tweets_for_model(negative_cleaned_tokens_list)
 
-    positive_dataset = [(tweet_dict, "Positive")
+    positive_dataset = [(tweet_dict, "positive")
                          for tweet_dict in positive_tokens_for_model]
 
-    negative_dataset = [(tweet_dict, "Negative")
+    negative_dataset = [(tweet_dict, "negative")
                          for tweet_dict in negative_tokens_for_model]
 
     dataset = positive_dataset + negative_dataset
@@ -150,15 +150,15 @@ def train():
     random.shuffle(dataset)
 
     train_data = dataset
-    test_data = dataset
+    #test_data = dataset
 
     global classifier
 
     classifier = NaiveBayesClassifier.train(train_data)
 
-    print("Accuracy is:", classify.accuracy(classifier, test_data))
+    #print("Accuracy is:", classify.accuracy(classifier, test_data))
 
-    print(classifier.show_most_informative_features(10))
+    #print(classifier.show_most_informative_features(10))
 
 def getSentiment(custom_tweet):
 
