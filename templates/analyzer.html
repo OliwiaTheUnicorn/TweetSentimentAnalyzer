@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<script type="text/javascript">// <![CDATA[
+        function loading(){
+            document.getElementById("full-overlay").style.width = "100%";
+            document.getElementById("btn-clear").disabled = true;
+            document.getElementById('btn-submit').disabled = true;
+        }
+// ]]></script>-->
+    <style>
+        div#loading {
+          border: 16px solid #f3f3f3;
+          border-radius: 50%;
+          border-top: 16px solid blue;
+          border-right: 16px solid green;
+          border-bottom: 16px solid red;
+          width: 120px;
+          height: 120px;
+          -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
+        }
+
+        /* The Overlay (background) */
+        .overlay {
+          /* Height & width depends on how you want to reveal the overlay (see JS below) */
+          height: 100%;
+          width: 0;
+          position: fixed; /* Stay in place */
+          z-index: 1; /* Sit on top */
+          left: 0;
+          top: 0;
+          background-color: rgb(0,0,0); /* Black fallback color */
+          background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+          overflow-x: hidden; /* Disable horizontal scroll */
+          transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+        }
+
+        .center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid #FFFF00;
+        }
+
+        /* When the height of the screen is less than 450 pixels, change the font-size of the links and position the close button again, so they don't overlap */
+        @media screen and (max-height: 450px) {
+          .overlay a {font-size: 20px}
+          .overlay .closebtn {
+            font-size: 40px;
+            top: 15px;
+            right: 35px;
+          }
+        }
+
+        @-webkit-keyframes spin {
+          0% { -webkit-transform: rotate(0deg); }
+          100% { -webkit-transform: rotate(360deg); }
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Tweet Sentiment Analyzer</title>
+</head>
+<body>
+<div class="container">
+    <div id="full-overlay" class="overlay">
+        <div id="loading" class="center">
+        </div>
+    </div>
+    <div id="content">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header text-center">
+                            <h1>Tweet Sentiment Analysis</h1>
+                        </div>
+                        <div class="card-body">
+                            <form method="post" class="form">
+                                <div class="form-group text-center py-3">
+                                    <input type="submit" id="btn-train" name="action" value="Train" class="btn btn-primary" onclick="loading();">
+                                   <!-- <input type="submit" id="btn-reset" name="action" value="Reset" class="btn btn-primary">-->
+                                    <button type="submit" id="btn-reset" name="action" value="Reset" class="btn btn-primary">Reset data</button>
+                                </div>
+
+                                <div class="form-group col-md-8  py-3">
+                                    <label for="inp">Please enter your sentence for analysis.</label>
+                                    <div class="input-group my-3">
+                                      <input type="text" value="{{ input }}" class="form-control" id="inp" name="inp" placeholder="Enter your feelings" aria-label="Enter Input" aria-describedby="basic-addon2">
+                                      <div class="input-group-append">
+                                        <input type="submit" id="btn-clear" name="action" value="Clear" class="btn btn-outline-secondary">
+                                        <input type="submit" id="btn-submit" name="action" value="Submit" class="btn btn-primary">
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="form-group dropdown text-center">
+                                   <label for="decision">Here provide the feedback, if the result was actually positive or negative</label>
+                                    <br/>
+                                    <select name="decision" id="decision" class="btn btn-primary text-light dropdown-toggle">
+                                      <option value="Positive">Result was positive</option>
+                                      <option value="Negative">Result was negative</option>
+                                    </select>
+                                    <button type="submit" id="btn-feedback" name="action" value="Feedback" class="btn btn-primary">Send feedback</button>
+                                </div>
+                            </form>
+                            <br/>
+                            <br/>
+                            <h1 class="output">The meaning is {{ message }}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
